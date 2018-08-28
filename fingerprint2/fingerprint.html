@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <script src="https://valve.github.io/fingerprintjs2/fingerprint2.js"></script> -->
+    <script src="./fingerprint2.js"></script>
+    <style>
+        body {
+            background-color: black;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .list {
+            font-size: 14px;
+        }
+
+        .s1,.s2 {
+            color: blueviolet;
+            font-size: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <button>Get Fingerprint</button>
+    <p>计算时间：
+        <span class="s1"></span>
+    </p>
+    <p>Your browser fingerprint: 
+        <span class="s2"></span>
+    </p>
+    <div class="list"></div>
+</body>
+<script>
+    const options = {
+        customFunction: function () {
+            return {
+                ip: '127.0.0.1',
+                uuid: '11111',
+                aip: '22222'
+            }
+        },
+        customKey: '11111'
+    }
+    const fp = new Fingerprint2(options);
+    const button = document.querySelector('button');
+    const s1 = document.querySelector('.s1');
+    const s2 = document.querySelector('.s2');
+    const list = document.querySelector('.list');
+
+    button.onclick = getFPinfo;
+
+    function getFPinfo() {
+        const strat_time = new Date();
+        fp.get((result, components) => {
+            const timestring = new Date() - strat_time + 'ms';
+            s1.innerHTML = timestring;
+            s2.innerHTML = result;
+
+            let html = '';
+
+            Object.entries(components).forEach(item => {
+                html += item[1].key + ' = ' + item[1].value + '<br>';
+            });
+            list.innerHTML = html;
+            console.log(result);
+            console.log(components)
+        })
+    }
+</script>
+
+</html>
